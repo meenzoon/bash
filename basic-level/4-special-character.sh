@@ -9,8 +9,7 @@ echo $(( 2#101011 ))
 # 명령어 구분자: ';'를 이용해 두 개 이상의 명령어를 한 줄에서 같이 쓸 수 있게 해줌
 
 # case 옵션 종료자: ';;' => 이중 세미콜론을 이용해 case 종료
-# variable = ( "abc" "cde" )
-
+variable=( "abc" "cde" )
 case "$variable" in
     abc) echo "$variable = abc" ;; 
     xyz) echo "$variable = xyz" ;;
