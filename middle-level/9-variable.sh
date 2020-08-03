@@ -42,3 +42,14 @@ eval a=\$$a
 echo "이제 a = $a"
 
 echo
+
+i=0
+while [ $i -lt 10 ]
+do
+    echo $RANDOM
+    (( i++ ))
+done
+
+a=46
+(( t = a<45?7:11))
+echo "t = $t"

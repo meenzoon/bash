@@ -15,8 +15,46 @@ ___
 ## 1. 변수 재검토
 ### 내부 변수
 - $BASH: Bash 실행 파일 경로, 보통 /bin/bash  
+
 - $BASH_ENV: 스크립트가 실행될 때 어디에서 bash 시작 파일을 읽을 것인지를 나타내는 환경변수
 
+- $FUCNAME: 현재 함수의 이름
+
+- $GROUPS: 현재 사용자가 속해 있는 그룹
+
+- $HOME: 사용자의 홈 디렉토리
+
+- $HOSTNAME: 
+
+- $IFS: 입력 필드 구분자
+
+- $PATH: 실행 파일 경로
+
+- $PPID: 어떤 프로세스의 부모 프로세스 아이디
+
+- $PWD: 작업 디렉토리(현재 있는 디렉토리), 내장 명령인 pwd와 비슷
+
+- $UID: 사용자 아이디 값
+
+#### 위치 매개변수
+  * $0, $1, $2 ... $n: 위치 매개변수, 명령어줄에서 스크립트로 넘겨지거나 함수로 넘겨지거나 set 명령어로 강제로 설정됨
+  
+  * $#: 명령어줄 인자의 갯수나 위치 매개변수들
+
+  * $*: 한 낱말로 표시되는 위치 매개변수들 모두
+
+  * $@: $*과 똑같지만 각 매개변수는 쿼우트된 문자열로 취급, 즉 해석되거나 확장없이 있는 그대로 넘겨짐
+
+#### 다른 특수 매개변수
+  * $-: 스크립트로 넘겨진 플래그들
+
+  * $!: 백그라운드로 돌고 있는 가장 최근 작업의 PID
+
+  * $_: 바로 이전에 실행된 명령어의 제일 마지막 인자로 설정되는 특수 변수
+
+  * $?: 명령어나 함수, 스크립트 자신의 종료 상태
+
+  * $$: 스크립트 자신의 프로세스 아이디
 
 ### 문자열 조작
 - 사용되는 기본 문자열
@@ -26,7 +64,9 @@ ___
 
 - 문자열 길이  
   * ${#string}  
+
   * expr length $string  
+
   * expr "$string" : '.*'  
   ```
   echo ${#stringZ}              # 20
@@ -36,6 +76,7 @@ ___
 
 - 문자열 시작에서부터 매칭되는 문자열조각(substring) 길이  
   * expr match "$string" '$substring'  
+
   * expr "$string" : '$substring'  
   ```
   echo `expr match "$stringZ" 'abcd[A-Z]*.2'` # 10
@@ -44,6 +85,7 @@ ___
 
 - 인덱스  
   * expr index $string $substring  
+
   * $string에서 일치하는 $substring 의 첫 문자의 위치
   ```
   echo `expr index "$stringZ" C12` # 7
@@ -52,7 +94,9 @@ ___
 
 - 문자열 조각 추출  
   * $string의 $position부터의 문자열 조각을 추출
+
   * ${string:position}
+
   * ${string:position:length}
   ```
   echo ${stringZ:7}
@@ -61,6 +105,7 @@ ___
 
 - 문자열 조각 삭제
   * ${string#substring}: $string의 앞 부분에서부터 가장 짧게 일치하는 $substring을 삭제
+
   * ${string##substring}: $string으 이파 부분에서부터 가장 길게 일치하는 $substring을 삭제
 
   ```
@@ -69,6 +114,7 @@ ___
   echo ${stringZ##a*C} #123ABCabc - 'a'와 'C' 사이에서 가장 길게 일치되는 부분을 삭제
   ```
   * ${string%substring}: $string의 뒷 부분에서부터 가장 짧게 일치하는 $substring을 삭제
+
   * ${string%%substring}: $string의 뒷 부분에서부터 가장 길게 일치하는 $substring을 삭제
   ```
   stringZ=abcABC123ABCabc
@@ -82,6 +128,7 @@ ___
 
 - 문자열 조각 대치  
   * ${string/substring/replacement}: 처음 일치하는 $substirng을 $replacement로 대치
+
   * ${string//substring/replacement}: 일치하는 모든 $substirng을 $replacement로 대치
   ```
   stringZ=abcABC123ABCabc
@@ -93,6 +140,7 @@ ___
   # 일치하는 모든 'abc'를 'xyz'로 대치.
   ```
   * ${string/#substring/replacement}: $substring이 $string의 맨 앞에서 일치하면 $replacement로 대치
+
   * ${string/%substring/replacement}: $substring이 $string의 맨 뒤에서 일치하면 $replacement로 대치
   ```
   stringZ=abcABC123ABCabc
@@ -147,14 +195,24 @@ ___
 
   * ${!varprefix*}, ${!varprefix@}: 이미 선언된 변수들 중에 varprefix로 시작하는 변수들
 
-### 변수 간접 참조
-
-
 ### 랜덤한 정수 만들기
-
+- $RANDOM: bash 내부 함수로 0에서 32767사이의 psuedorandom(의사난수)값을 return
+```
+i=0
+while [ $i -lt 10 ]
+do
+    echo $RANDOM
+    (( i++ ))
+done
+```
 
 ### 이중소괄호
-
+- let명령와와 비슷하게 (( ... )) 도 산술 확장과 계산을 사용할 수 있음
+```
+(( a = 23 )) # "=" 양쪽에 빈 칸을 두어 변수 세팅
+(( a++ )) # 'a'를 후위증가
+(( t = a<45?7:11))
+```
 
 
 &#9650; [위로](#중급-단계)
@@ -452,69 +510,69 @@ ___
 - hwclock, clock: 시스템의 하드웨어 클럭을 읽거나 조절해 줍니다. clock 명령어는 hwclock과 동의어
 
 ### 텍스트 처리 명령어
-- sort
+- sort: 주로 파이프에서 필터로 쓰여 파일을 정렬할 때 사용
 
-- tsort
+- tsort: 공백문자로 구분되는 문자열의 쌍을 읽어 패턴에 따라 정렬
 
-- diff, patch
+- diff: 파일 비교 유틸리티, 대상 파일들을 줄 단위로 차례 차례 비교
 
-- diff3
+- patch: 버전 관리 유틸리티
 
-- sdiff
+- diff3: diff의 확장 버전으로 동시에 세 개의 파일을 비교, 성공시 0을 리턴, 비교 결과에 대한 정보는 출력하지 않음
+
+- sdiff: 두 개의 파일을 한 파일로 합치기 위해서 비교하거나 편집
   
-- cmp
+- cmp: diff의 간단한 버전, diff: 파일간의 차이점에 대해 보고해주지만, cmp는 단지 두 파일간에 서로 달느 부분만을 출력
 
-- comm
+- comm: 다목적 파일 비교 유틸리티
   
-- uniq
+- uniq: 정렬된 파일에서 중복된 줄을 제거
 
-- expand, unexpand
+- cut: 파일에서 필드를 뽑아내는 툴
 
-- cut
+- colrm: 칸 제거 필터
 
-- colrm
+- paste: 서로 다른 파일들을 여러 단으로 나뉘어진 하나의 파일로 만들어주는 툴
 
-- paste
+- join: 특숳나 목적을 가진 paste류의 명령어
 
-- join
+- head: 파일 앞부분을 표준출력으로 보여줍니다.
 
-- head
+- tail: 파일 뒷부분을 표준출력으로 보여줍니다. 파일 뒷부분에 계속 덧붙여지는 사항을 볼 수 있게 해 주는 -f옵션과 함께 자주 사용
 
-- tail
+- grep: 정규 표현식을 쓰는 다목적 파일 검색 도구
 
-- grep
+- look: grep과 비슷하게 동작하지만 정렬된 낱말 목록인 "사전"에 들어 있는 낱말에 대해서만 찾는 명령어
 
-- look
+- sed: 많은 ex 명령어들을 배치 모드에서 쓸 수 있게 해주는 비대화형 스트림 에디터
 
-- sed
+- awk: 프로그램 가능한 파일 분석 및 형식화 명령어로서, 구조화된 텍스트 파일의 필드나 컬럼을 뽑아내고 조작하는데 적당한 명령어
 
-- awk
+- wc: wc는 파일이나 I/O 스트림에 나타나는 낱말 갯수를 출력
 
-- wc
+- tr: 문자 변환 필터
 
-- tr
+- fold: 입력 줄을 주어지 넓이로 접어주는 필터, 특별히 유용한 -s 옵션을 쓰면 낱말 사이의 빈 칸에서 줄을 나눠줍니다.
 
-- fold
+- fmt: 간단한 파일 형식화 명령어로 파이프 중간에 필터로 쓰여 긴 줄을 접기위해 사용
 
-- fmt
+- ptx: targetfile의 permuted index를 출력
 
-- ptx
+- column: 컬럼 형식화 명령어
 
-- column
+- nl: 줄 번호 매기기 필터
 
-- nl
+- pr: 출력 형식화 필터
 
-- pr
+- gettext: 프로그램의 출력을 다른 언어로 번역해서 보여주는 GNU 지역화 유틸리티
 
-- gettext
+- iconv: 주로 지역화에서 쓰이는 명령어로 파일을 다른 인코딩으로 변환
 
-- iconv
+- recode: iconv의 개선판, 해당 유틸리티는 표준 리눅스 설치시에는 포함되지 않음
 
-- recode
+- lex: 구문 분석기, 패턴 매칭을 위한 프로그램 생성, 리눅스 시스템에서는 비특허 버전인 flex로 변경
 
-- groff, gs, TeX
-
-- lex, yacc
+- yacc: 유틸리티 스펫셋에 의거한 파서 생성, 리눅스 시스템에서는 비특허 버전인 bison으로 변경
 
 ### 파일, 아카이브(archive) 명령어
   #### archiving
@@ -587,6 +645,45 @@ ___
 - more, less: 텍스트 파일이나 스트림을 표준출력으로 한 번에 한 쪽씩 표시해주는 페이저, 스크립트의 출력을 위한 필터로도 사용 가능
 
 ### 통신 명령어
+#### 정보 및 통계
+  * host
+
+  * vrfy
+
+  * nslookup
+
+  * dig
+
+  * traceroute
+
+  * ping
+
+  * whois
+
+  * finger
+#### 리모트 호스트 접근
+  * sx, rx
+
+  * sz, rz
+
+  * ftp
+
+  * cu
+
+  * uucp
+
+  * telnet
+
+  * rlogin
+
+  * rsh
+
+  * rcp
+
+  * ssh
+
+#### 지역 네트워크
+  * write
 
 
 ### 터미널 제어 명령어
